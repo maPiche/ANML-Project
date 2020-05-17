@@ -30,6 +30,6 @@ PyTorch 1.4.0
 Tensorboard
 
 ##  Built from :
-* [ANML]<https://github.com/uvm-neurobotics-lab/ANML>
+* [ANML](https://github.com/uvm-neurobotics-lab/ANML)
 * [OML/MRCL](https://github.com/khurramjaved96/mrcl)
 
