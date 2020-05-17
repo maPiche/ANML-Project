@@ -1,0 +1,131 @@
+{
+    "command_args": "python C:/Users/usele/Documents/Cours/IFT6760B/ANML-Project/ANML/evaluate_classification.py --rln 0 --model Neuromodulation_Model.net --name Omni_test_traj --runs 10",
+    "dir": "../results/",
+    "full_path": "../results/12May2020/omniglot/eval/1/Omni_test_traj",
+    "name": "omniglot/eval/1/Omni_test_traj",
+    "params": {
+        "commit": false,
+        "dataset": "omniglot",
+        "dataset_path": null,
+        "epoch": 1,
+        "iid": false,
+        "memory": 0,
+        "model": "Neuromodulation_Model.net",
+        "name": "omniglot/eval/1/Omni_test_traj",
+        "neuromodulation": false,
+        "no_freeze": false,
+        "reset": false,
+        "rln": 0,
+        "runs": 10,
+        "schedule": [
+            10,
+            50,
+            75,
+            100,
+            200,
+            300,
+            400,
+            500,
+            600
+        ],
+        "scratch": false,
+        "seed": 222,
+        "test": false
+    },
+    "path": "../results/12May2020/omniglot/eval/1/Omni_test_traj_1/",
+    "results": {
+        "Temp Results": [
+            [
+                10,
+                {
+                    "0": [
+                        0.92,
+                        0.00025
+                    ]
+                }
+            ],
+            [
+                10,
+                {
+                    "0": [
+                        0.8733333333333333,
+                        0.00035
+                    ]
+                }
+            ],
+            [
+                10,
+                {
+                    "0": [
+                        0.8866666666666667,
+                        0.00025
+                    ]
+                }
+            ],
+            [
+                10,
+                {
+                    "0": [
+                        0.8666666666666667,
+                        0.00025
+                    ]
+                }
+            ],
+            [
+                10,
+                {
+                    "0": [
+                        0.9133333333333333,
+                        0.0002
+                    ]
+                }
+            ],
+            [
+                10,
+                {
+                    "0": [
+                        0.9066666666666666,
+                        0.0003
+                    ]
+                }
+            ],
+            [
+                10,
+                {
+                    "0": [
+                        0.9,
+                        0.00025
+                    ]
+                }
+            ],
+            [
+                10,
+                {
+                    "0": [
+                        0.8733333333333333,
+                        0.0002
+                    ]
+                }
+            ],
+            [
+                10,
+                {
+                    "0": [
+                        0.9,
+                        0.0003
+                    ]
+                }
+            ],
+            [
+                10,
+                {
+                    "0": [
+                        0.9066666666666666,
+                        0.00015
+                    ]
+                }
+            ]
+        ]
+    },
+    "root_folder": "../results/12May2020"
+}

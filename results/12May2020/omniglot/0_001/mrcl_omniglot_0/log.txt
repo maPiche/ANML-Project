@@ -1,0 +1,82 @@
+experiment  : INFO     Len of complete iterator = 19264
+experiment  : INFO     RLN layer net.vars.0
+experiment  : INFO     RLN layer net.vars.1
+experiment  : INFO     RLN layer net.vars.2
+experiment  : INFO     RLN layer net.vars.3
+experiment  : INFO     RLN layer net.vars.4
+experiment  : INFO     RLN layer net.vars.5
+experiment  : INFO     RLN layer net.vars.6
+experiment  : INFO     RLN layer net.vars.7
+experiment  : INFO     RLN layer net.vars.8
+experiment  : INFO     RLN layer net.vars.9
+experiment  : INFO     RLN layer net.vars.10
+experiment  : INFO     RLN layer net.vars.11
+experiment  : INFO     RLN layer net.vars.12
+experiment  : INFO     RLN layer net.vars.13
+experiment  : INFO     TLN layer = net.vars.14
+experiment  : INFO     TLN layer = net.vars.15
+experiment  : INFO     TLN layer = net.vars.16
+experiment  : INFO     TLN layer = net.vars.17
+experiment  : INFO     TLN layer = net.vars.18
+experiment  : INFO     TLN layer = net.vars.19
+experiment  : INFO     TLN layer = net.vars.20
+experiment  : INFO     TLN layer = net.vars.21
+experiment  : INFO     TLN layer = net.vars.22
+experiment  : INFO     TLN layer = net.vars.23
+experiment  : INFO     TLN layer = net.vars.24
+experiment  : INFO     TLN layer = net.vars.25
+experiment  : INFO     TLN layer = net.vars.26
+experiment  : INFO     TLN layer = net.vars.27
+experiment  : INFO     TLN layer = net.vars_bn.0
+experiment  : INFO     TLN layer = net.vars_bn.1
+experiment  : INFO     TLN layer = net.vars_bn.2
+experiment  : INFO     TLN layer = net.vars_bn.3
+experiment  : INFO     TLN layer = net.vars_bn.4
+experiment  : INFO     TLN layer = net.vars_bn.5
+experiment  : INFO     TLN layer = net.vars_bn.6
+experiment  : INFO     TLN layer = net.vars_bn.7
+experiment  : INFO     TLN layer = net.vars_bn.8
+experiment  : INFO     TLN layer = net.vars_bn.9
+experiment  : INFO     TLN layer = net.vars_bn.10
+experiment  : INFO     TLN layer = net.vars_bn.11
+experiment  : INFO     step: 0 	 training acc 0.23809523809523808
+experiment  : INFO     step: 40 	 training acc 0.23809523809523808
+experiment  : INFO     step: 80 	 training acc 0.23809523809523808
+experiment  : INFO     step: 120 	 training acc 0.23809523809523808
+experiment  : INFO     step: 160 	 training acc 0.23809523809523808
+experiment  : INFO     step: 200 	 training acc 0.23809523809523808
+experiment  : INFO     step: 240 	 training acc 0.23809523809523808
+experiment  : INFO     step: 280 	 training acc 0.23809523809523808
+experiment  : INFO     step: 320 	 training acc 0.2619047619047619
+experiment  : INFO     step: 360 	 training acc 0.23809523809523808
+experiment  : INFO     step: 400 	 training acc 0.2619047619047619
+experiment  : INFO     step: 440 	 training acc 0.2857142857142857
+experiment  : INFO     step: 480 	 training acc 0.4523809523809524
+experiment  : INFO     step: 520 	 training acc 0.30952380952380953
+experiment  : INFO     step: 560 	 training acc 0.38095238095238093
+experiment  : INFO     step: 600 	 training acc 0.30952380952380953
+experiment  : INFO     step: 640 	 training acc 0.39285714285714285
+experiment  : INFO     step: 680 	 training acc 0.4166666666666667
+experiment  : INFO     step: 720 	 training acc 0.4523809523809524
+experiment  : INFO     step: 760 	 training acc 0.44047619047619047
+experiment  : INFO     step: 800 	 training acc 0.5595238095238095
+experiment  : INFO     step: 840 	 training acc 0.5357142857142857
+experiment  : INFO     step: 880 	 training acc 0.5833333333333334
+experiment  : INFO     step: 920 	 training acc 0.6071428571428571
+experiment  : INFO     step: 960 	 training acc 0.5833333333333334
+experiment  : INFO     step: 1000 	 training acc 0.5595238095238095
+experiment  : INFO     step: 1040 	 training acc 0.6190476190476191
+experiment  : INFO     step: 1080 	 training acc 0.6785714285714286
+experiment  : INFO     step: 1120 	 training acc 0.6309523809523809
+experiment  : INFO     step: 1160 	 training acc 0.6547619047619048
+experiment  : INFO     step: 1200 	 training acc 0.6547619047619048
+experiment  : INFO     step: 1240 	 training acc 0.5357142857142857
+experiment  : INFO     step: 1280 	 training acc 0.6904761904761905
+experiment  : INFO     step: 1320 	 training acc 0.7142857142857143
+experiment  : INFO     step: 1360 	 training acc 0.6428571428571429
+experiment  : INFO     step: 1400 	 training acc 0.6309523809523809
+experiment  : INFO     step: 1440 	 training acc 0.5952380952380952
+experiment  : INFO     step: 1480 	 training acc 0.6785714285714286
+experiment  : INFO     step: 1520 	 training acc 0.6904761904761905
+experiment  : INFO     step: 1560 	 training acc 0.7619047619047619
+experiment  : INFO     step: 1600 	 training acc 0.7023809523809523
