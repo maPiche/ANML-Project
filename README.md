@@ -4,8 +4,7 @@ Adapting ANML to test it's performance on more plausible continual learning sett
 This projet is based on papers:
 
 *ANML: Learning to Continually Learn (ECAI 2020)* 
-
-[arXiv Link]<https://arxiv.org/abs/2002.09571>
+\<https://arxiv.org/abs/2002.09571>
 
 
 
