@@ -2,8 +2,9 @@
 Adapting ANML to test it's performance on more plausible continual learning settings
 
 This projet is based on papers:
+
 *ANML: Learning to Continually Learn (ECAI 2020)* 
-[arXiv Link]<https://arxiv.org/abs/2002.09571>
+\<https://arxiv.org/abs/2002.09571>
 
 
 
@@ -30,6 +31,6 @@ PyTorch 1.4.0
 Tensorboard
 
 ##  Built from :
-* [ANML]<https://github.com/uvm-neurobotics-lab/ANML>
+* [ANML](https://github.com/uvm-neurobotics-lab/ANML)
 * [OML/MRCL](https://github.com/khurramjaved96/mrcl)
 
