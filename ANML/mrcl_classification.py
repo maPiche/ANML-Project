@@ -26,8 +26,8 @@ def main(args):
     # Using first 963 classes of the omniglot as the meta-training set
     args.classes = list(range(963))
 
-    dataset = df.DatasetFactory.get_dataset(args.dataset, background=True, train=True, all=True)
-    dataset_test = df.DatasetFactory.get_dataset(args.dataset, background=True, train=False, all=True)
+    dataset = df.DatasetFactory.get_dataset(args.dataset, ksplit=5, background=True, train=True, all=True)
+    dataset_test = df.DatasetFactory.get_dataset(args.dataset, ksplit=5, background=True, train=False, all=True)
 
     # Iterators used for evaluation
     iterator_test = torch.utils.data.DataLoader(dataset_test, batch_size=5,
@@ -67,7 +67,7 @@ def main(args):
 
         d_rand_iterator = sampler.get_complete_iterator()
 
-        x_spt, y_spt, x_qry, y_qry = maml.sample_training_data(d_traj_iterators, d_rand_iterator,
+        x_spt, y_spt, x_qry, y_qry = maml.sample_training_data(d_traj_iterators, d_rand_iterator, ksplit=args.ksplit,
                                                                steps=args.update_step, reset=not args.no_reset)
         if torch.cuda.is_available():
             x_spt, y_spt, x_qry, y_qry = x_spt.cuda(), y_spt.cuda(), x_qry.cuda(), y_qry.cuda()
@@ -95,6 +95,7 @@ if __name__ == '__main__':
     argparser.add_argument('--seed', type=int, help='Seed for random', default=10000)
     argparser.add_argument('--seeds', type=int, nargs='+', help='n way', default=[10])
     argparser.add_argument('--tasks', type=int, help='meta batch size, namely task num', default=1)
+    argparser.add_argument('--ksplit', type=int, help='number of char per alphabet', default=8)
     argparser.add_argument('--meta_lr', type=float, help='meta-level outer learning rate', default=1e-2)
     argparser.add_argument('--update_lr', type=float, help='task-level inner update learning rate', default=0.01)
     argparser.add_argument('--update_step', type=int, help='task-level inner update steps', default=20)

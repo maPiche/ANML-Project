@@ -1,5 +1,3 @@
-
-Learn more or give us feedback
 import logging
 import copy
 import numpy as np
@@ -38,6 +36,7 @@ class MetaLearingClassification(nn.Module):
         self.inputNM = True
         self.nodeNM = False
         self.layers_to_fix = []
+        self.ksplit = args.ksplit
 
     def reset_classifer(self, class_to_reset):
         bias = self.net.parameters()[-1]
@@ -93,8 +92,8 @@ class MetaLearingClassification(nn.Module):
         class_cur = 0
         class_to_reset = 0
         for it1 in iterators:
-            for img, data in it1:
-                class_to_reset = data[0].item()
+            for img, data, tasks in it1:
+                class_to_reset = data[0].item() + (self.ksplit * tasks[0].item())
                 if reset:
                     #next
                     # Resetting weights corresponding to classes in the inner updates; this prevents

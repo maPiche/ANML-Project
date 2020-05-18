@@ -1,5 +1,3 @@
-
-Learn more or give us feedback
 from __future__ import print_function
 
 import os
@@ -35,7 +33,7 @@ class Omniglot(data.Dataset):
         'images_evaluation': '6b91aef0f799c5bb55b94e3f2daec811'
     }
 
-    def __init__(self, root, background=True,
+    def __init__(self, root, ksplit: int, background=True,
                  transform=None, target_transform=None,
                  download=False, train=True, all=False):
         self.root = join(os.path.expanduser(root), self.folder)
@@ -43,6 +41,7 @@ class Omniglot(data.Dataset):
         self.transform = transform
         self.target_transform = target_transform
         self.images_cached = {}
+        self.ksplit = ksplit
 
         if download:
             self.download()
@@ -53,8 +52,16 @@ class Omniglot(data.Dataset):
 
         self.target_folder = join(self.root, self._get_target_folder())
         self._alphabets = list_dir(self.target_folder)
-        self._characters = sum([[join(a, c) for c in list_dir(join(self.target_folder, a))]
+        if self.ksplit < 2:
+            self._characters = sum([[join(a, c) for c in list_dir(join(self.target_folder, a))]
                                 for a in self._alphabets], [])
+        else:
+            langu = [[join(a, c) for c in list_dir(join(self.target_folder, a))] for a in self._alphabets]
+            for item in langu:
+                a = len(item)
+                if a % self.ksplit > 0:
+                    del item[-(a % self.ksplit):]
+            self._characters = sum(langu, [])
         self._character_images = [[(image, idx) for image in list_files(join(self.target_folder, character), '.png')]
                                   for idx, character in enumerate(self._characters)]
         self._flat_character_images = sum(self._character_images, [])
@@ -63,6 +70,8 @@ class Omniglot(data.Dataset):
         self.data2 = []
         self.targets2 = []
         self.new_flat = []
+
+
         for a in range(int(len(self.targets) / 20)):
             start = a * 20
             if train:
@@ -70,9 +79,8 @@ class Omniglot(data.Dataset):
                     self.data2.append(self.data[b])
                     self.targets2.append(self.targets[b])
                     self.new_flat.append(self._flat_character_images[b])
-                    # print(self.targets[start+b])
             else:
-                for b in range(start+15, start+20):#(start + 15, start + 20):
+                for b in range(start+15, start+20):
                     self.data2.append(self.data[b])
                     self.targets2.append(self.targets[b])
                     self.new_flat.append(self._flat_character_images[b])
@@ -95,9 +103,9 @@ class Omniglot(data.Dataset):
         Args:
             index (int): Index
         Returns:
-            tuple: (image, target) where target is index of the target character class.
+            tuple: (image, target, task) where target is index of the target character class.
         """
-        # image_name, character_class = self._flat_character_images[index]
+
         image_name = self.data[index]
         character_class = self.targets[index]
         image_path = join(self.target_folder, self._characters[character_class], image_name)
@@ -105,11 +113,8 @@ class Omniglot(data.Dataset):
 
             image = Image.open(image_path, mode='r').convert('RGB')#L
             image = image.resize((28, 28), resample=Image.LANCZOS)
-            #image = np.array(image, dtype=np.float32)
-            #normalize = transforms.Normalize(mean=[0.92206*256], std=[0.08426*256*256])
             normalize = transforms.Normalize(mean=[0.92206*256, 0.92206*256, 0.92206*256], std=[0.08426*256*256, 0.08426*256*256, 0.08426*256*256]) # adjust means and std of input data 
             self.transform = transforms.Compose([transforms.ToTensor(), normalize])
-            #self.transform = transforms.ToTensor()
             if self.transform is not None:
                 image = self.transform(image)
 
@@ -123,7 +128,7 @@ class Omniglot(data.Dataset):
         if self.target_transform:
             character_class = self.target_transform(character_class)
 
-        return image, character_class
+        return image, character_class % self.ksplit, character_class // self.ksplit
 
     def _cache_data(self):
         pass

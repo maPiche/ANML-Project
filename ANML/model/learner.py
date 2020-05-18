@@ -225,7 +225,7 @@ class Learner(nn.Module):
                 # NM Output
 
                 w,b = vars[12], vars[13]
-                fc_mask = F.sigmoid(F.linear(nm_data, w, b)).view(nm_data.size(0), 2304)
+                fc_mask = torch.sigmoid(F.linear(nm_data, w, b)).view(nm_data.size(0), 2304)
 
 
                 # =========== PREDICTION NETWORK ===========
