@@ -1,0 +1,43 @@
+experiment  : INFO     Len of complete iterator = 18112
+experiment  : INFO     RLN layer net.vars.0
+experiment  : INFO     RLN layer net.vars.1
+experiment  : INFO     RLN layer net.vars.2
+experiment  : INFO     RLN layer net.vars.3
+experiment  : INFO     RLN layer net.vars.4
+experiment  : INFO     RLN layer net.vars.5
+experiment  : INFO     RLN layer net.vars.6
+experiment  : INFO     RLN layer net.vars.7
+experiment  : INFO     RLN layer net.vars.8
+experiment  : INFO     RLN layer net.vars.9
+experiment  : INFO     RLN layer net.vars.10
+experiment  : INFO     RLN layer net.vars.11
+experiment  : INFO     RLN layer net.vars.12
+experiment  : INFO     RLN layer net.vars.13
+experiment  : INFO     TLN layer = net.vars.14
+experiment  : INFO     TLN layer = net.vars.15
+experiment  : INFO     TLN layer = net.vars.16
+experiment  : INFO     TLN layer = net.vars.17
+experiment  : INFO     TLN layer = net.vars.18
+experiment  : INFO     TLN layer = net.vars.19
+experiment  : INFO     TLN layer = net.vars.20
+experiment  : INFO     TLN layer = net.vars.21
+experiment  : INFO     TLN layer = net.vars.22
+experiment  : INFO     TLN layer = net.vars.23
+experiment  : INFO     TLN layer = net.vars.24
+experiment  : INFO     TLN layer = net.vars.25
+experiment  : INFO     TLN layer = net.vars.26
+experiment  : INFO     TLN layer = net.vars.27
+experiment  : INFO     TLN layer = net.vars.28
+experiment  : INFO     TLN layer = net.vars.29
+experiment  : INFO     TLN layer = net.vars_bn.0
+experiment  : INFO     TLN layer = net.vars_bn.1
+experiment  : INFO     TLN layer = net.vars_bn.2
+experiment  : INFO     TLN layer = net.vars_bn.3
+experiment  : INFO     TLN layer = net.vars_bn.4
+experiment  : INFO     TLN layer = net.vars_bn.5
+experiment  : INFO     TLN layer = net.vars_bn.6
+experiment  : INFO     TLN layer = net.vars_bn.7
+experiment  : INFO     TLN layer = net.vars_bn.8
+experiment  : INFO     TLN layer = net.vars_bn.9
+experiment  : INFO     TLN layer = net.vars_bn.10
+experiment  : INFO     TLN layer = net.vars_bn.11

@@ -1,0 +1,6 @@
+experiment  : INFO     Frozen layers = 
+experiment  : INFO     Filter list = vars.0,vars.1,vars.2,vars.3,vars.4,vars.5
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.035333333333333335
+experiment  : INFO     Filter list = vars.0,vars.1,vars.2,vars.3,vars.4,vars.5
+experiment  : INFO     Result after one epoch for LR = 0.000600

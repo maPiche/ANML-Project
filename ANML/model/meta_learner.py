@@ -124,7 +124,7 @@ class MetaLearingClassification(nn.Module):
 
         # Sampling the random batch of data
         counter = 0
-        for img, data, charc, task  in it2:
+        for img, data, charc, task in it2:
             if counter == 1:
                 break
             x_rand.append(img)

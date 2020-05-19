@@ -274,8 +274,6 @@ class Learner(nn.Module):
                 # data = maxpool(data, kernel_size=2, stride=2)
 
                 data = data.view(data.size(0), 2304)  # nothing-max-max
-                # data = data*fc_mask
-                # todo
 
                 w, b = vars[28], vars[29]
                 data = F.linear(data, w, b)

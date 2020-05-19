@@ -50,16 +50,17 @@ def main(args):
         lr_all = []
         for lr_search in range(10):
 
-            keep = np.random.choice(list(range(650)), tot_class, replace=False)
-            
+            #keep = np.random.choice(list(range(650)), tot_class, replace=False)
+            keep = list(range(tot_class))
+
             dataset = utils.remove_classes_omni(
-                df.DatasetFactory.get_dataset("omniglot", train=True, background=False, path=args.dataset_path), keep)
+                df.DatasetFactory.get_dataset("omniglot",ksplit=args.ksplit, train=True, background=False, path=args.dataset_path), keep)
             iterator_sorted = torch.utils.data.DataLoader(
                 utils.iterator_sorter_omni(dataset, False, classes=total_clases),
                 batch_size=1,
                 shuffle=args.iid, num_workers=2)
             dataset = utils.remove_classes_omni(
-                df.DatasetFactory.get_dataset("omniglot", train=not args.test, background=False, path=args.dataset_path),
+                df.DatasetFactory.get_dataset("omniglot",ksplit=args.ksplit, train=not args.test, background=False, path=args.dataset_path),
                 keep)
             iterator = torch.utils.data.DataLoader(dataset, batch_size=1,
                                                    shuffle=False, num_workers=1)
@@ -83,7 +84,7 @@ def main(args):
 
                     if args.scratch:
                         config = mf.ModelFactory.get_model("OML", args.dataset)
-                        maml = learner.Learner(config)
+                        maml = learner.Learner(config, args.ksplit)
                         # maml = MetaLearingClassification(args, config).to(device).net
 
                     maml = maml.to(device)
@@ -138,7 +139,7 @@ def main(args):
                        
                     filter_list = ["vars.{0}".format(v) for v in range(6)]
 
-                    logger.info("Filter list = %s", ",".join(filter_list))
+                    #logger.info("Filter list = %s", ",".join(filter_list))
 
                     list_of_names = list(
                         map(lambda x: x[1], list(filter(lambda x: x[0] not in filter_list, maml.named_parameters()))))
@@ -150,16 +151,16 @@ def main(args):
                         print("Empty filter list")
                         list_of_params = maml.parameters()
                     
-                    for x in list_of_names:
-                        logger.info("Unfrozen layer = %s", str(x[0]))
+                    #for x in list_of_names:
+                     #   logger.info("Unfrozen layer = %s", str(x[0]))
                     opt = torch.optim.Adam(list_of_params, lr=lr)
 
                     for _ in range(0, args.epoch):
-                        for img, y in iterator_sorted:
+                        for img, y, charc, task in iterator_sorted:
                             img = img.to(device)
-                            y = y.to(device)
+                            y = y.long().to(device)
 
-                            pred = maml(img)
+                            pred = maml(img, task)
                             opt.zero_grad()
                             loss = F.cross_entropy(pred, y)
                             loss.backward()
@@ -167,10 +168,10 @@ def main(args):
 
                     logger.info("Result after one epoch for LR = %f", lr)
                     correct = 0
-                    for img, target in iterator:
+                    for img, target, charc, task in iterator:
                         img = img.to(device)
                         target = target.to(device)
-                        logits_q = maml(img, vars=None, bn_training=False, feature=False)
+                        logits_q = maml(img, task, vars=None, bn_training=False, feature=False)
 
                         pred_q = (logits_q).argmax(dim=1)
 
@@ -242,7 +243,7 @@ def main(args):
 
                 if args.scratch:
                     config = mf.ModelFactory.get_model("MRCL", args.dataset)
-                    maml = learner.Learner(config)
+                    maml = learner.Learner(config, args.ksplit)
 
                 maml = maml.to(device)
 
@@ -309,7 +310,7 @@ def main(args):
 
                 filter_list = ["vars.{0}".format(v) for v in range(6)]
 
-                logger.info("Filter list = %s", ",".join(filter_list))
+                #logger.info("Filter list = %s", ",".join(filter_list))
                
                 list_of_names = list(
                     map(lambda x: x[1], list(filter(lambda x: x[0] not in filter_list, maml.named_parameters()))))
@@ -370,7 +371,7 @@ if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
     argparser.add_argument('--epoch', type=int, help='epoch number', default=1)
     argparser.add_argument('--seed', type=int, help='epoch number', default=222)
-    argparser.add_argument('--schedule', type=int, nargs='+', default=[10,50,75,100,200,300,400,500,600],
+    argparser.add_argument('--schedule', type=int, nargs='+', default=[100, 200, 400, 590],
                         help='Decrease learning rate at these epochs.')
     argparser.add_argument('--memory', type=int, help='epoch number', default=0)
     argparser.add_argument('--model', type=str, help='epoch number', default="none")
@@ -386,6 +387,7 @@ if __name__ == '__main__':
     argparser.add_argument("--rln", type=int, default=6)
     argparser.add_argument("--runs", type=int, default=50)
     argparser.add_argument("--neuromodulation", action="store_true")
+    argparser.add_argument('--ksplit', type=int, help='number of char per alphabet', default=5)
 
     args = argparser.parse_args()
 

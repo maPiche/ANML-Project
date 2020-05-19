@@ -1,0 +1,46 @@
+{
+    "command_args": "python C:/Users/usele/Documents/Cours/IFT6760B/ANML-Project/ANML/mrcl_classification.py --rln 7 --meta_lr 0.001 --update_lr 0.1 --name mrcl_omniglot --steps 20000 --seed 9 --model_name Neuromodulation_Model.net",
+    "dir": "../results/",
+    "full_path": "../results/19May2020/omniglot/0_001/mrcl_omniglot",
+    "name": "omniglot/0_001/mrcl_omniglot",
+    "params": {
+        "checkpoint": false,
+        "commit": false,
+        "dataset": "omniglot",
+        "ksplit": 5,
+        "meta_lr": 0.001,
+        "model": "none",
+        "model_name": "Neuromodulation_Model.net",
+        "name": "omniglot/0_001/mrcl_omniglot",
+        "no_reset": false,
+        "rln": 7,
+        "saved_model": "my_model.net",
+        "seed": 9,
+        "seeds": [
+            10
+        ],
+        "steps": 20000,
+        "tasks": 1,
+        "treatment": "Neuromodulation",
+        "update_lr": 0.1,
+        "update_step": 20
+    },
+    "path": "../results/19May2020/omniglot/0_001/mrcl_omniglot_7/",
+    "results": {
+        "Temp Results": [
+            [
+                1,
+                2,
+                3,
+                4
+            ],
+            [
+                5,
+                6,
+                2,
+                6
+            ]
+        ]
+    },
+    "root_folder": "../results/19May2020"
+}
