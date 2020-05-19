@@ -103,7 +103,7 @@ class Omniglot(data.Dataset):
         Args:
             index (int): Index
         Returns:
-            tuple: (image, target, task) where target is index of the target character class.
+            tuple: (image, target) where target is index of the target character class.
         """
 
         image_name = self.data[index]
@@ -128,7 +128,7 @@ class Omniglot(data.Dataset):
         if self.target_transform:
             character_class = self.target_transform(character_class)
 
-        return image, character_class % self.ksplit, character_class // self.ksplit
+        return image, character_class, character_class % self.ksplit, character_class // self.ksplit
 
     def _cache_data(self):
         pass

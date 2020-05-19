@@ -8,6 +8,7 @@ from torch.nn import functional as F
 
 logger = logging.getLogger("experiment")
 
+
 def batchnorm(input, weight=None, bias=None, running_mean=None, running_var=None, training=True, eps=1e-5, momentum=0.1):
     ''' momentum = 1 restricts stats to the current mini-batch '''
     # This hack only works when momentum is 1 and avoids needing to track running stats
@@ -16,15 +17,18 @@ def batchnorm(input, weight=None, bias=None, running_mean=None, running_var=None
     running_var = torch.ones(np.prod(np.array(input.data.size()[1])))
     return F.batch_norm(input, running_mean, running_var, weight, bias, training, momentum, eps)
 
+
 def maxpool(input, kernel_size, stride=None):
     return F.max_pool2d(input, kernel_size, stride)
+
 
 def conv2d(input, weight, bias=None, stride=1, padding=0, dilation=1, groups=1):
     return F.conv2d(input, weight, bias, stride, padding, dilation, groups)
 
+
 class Learner(nn.Module):
 
-    def __init__(self, config, neuromodulation=True):
+    def __init__(self, config, ksplit: int, neuromodulation=True):
         """
         :param config: network config file, type:list of (string, list)
         :param imgc: 1 or 3
@@ -38,6 +42,7 @@ class Learner(nn.Module):
         self.vars = nn.ParameterList()
         # running_mean and running_var
         self.vars_bn = nn.ParameterList()
+        self.ksplit = ksplit
 
         for i, (name, param) in enumerate(self.config):
             if 'conv' in name:
@@ -66,13 +71,13 @@ class Learner(nn.Module):
                 torch.nn.init.kaiming_normal_(w)
                 self.vars.append(w)
                 # [ch_out]
-                
-                #if 'nm_to' in name:
+
+                # if 'nm_to' in name:
                 #    bias_init = -3
                 #    bias_ = nn.Parameter(torch.zeros(param[0]))
                 #    bias_.data.fill_(bias_init)
                 #    self.vars.append(bias_)
-                #else:    
+                # else:
 
                 self.vars.append(nn.Parameter(torch.zeros(param[0])))
 
@@ -100,7 +105,6 @@ class Learner(nn.Module):
                 continue
             else:
                 raise NotImplementedError
-
 
     def extra_repr(self):
         info = ''
@@ -149,9 +153,8 @@ class Learner(nn.Module):
                 raise NotImplementedError
 
         return info
-    
 
-    def forward(self, x, vars=None, bn_training=True, feature=False):
+    def forward(self, x, task, vars=None, bn_training=True, feature=False):
         """
         This function can be called by finetunning, however, in finetunning, we dont wish to update
         running_mean/running_var. Thought weights/bias of bn is updated, it has been separated by fast_weights.
@@ -162,7 +165,7 @@ class Learner(nn.Module):
         :param bn_training: set False to not update
         :return: x, loss, likelihood, kld
         """
-        
+
         cat_var = False
         cat_list = []
 
@@ -175,103 +178,108 @@ class Learner(nn.Module):
 
             # =========== NEUROMODULATORY NETWORK ===========
 
-            #'conv1_nm'
-            #'bn1_nm'
-            #'conv2_nm'
-            #'bn2_nm'
-            #'conv3_nm'
-            #'bn3_nm'
+            # 'conv1_nm'
+            # 'bn1_nm'
+            # 'conv2_nm'
+            # 'bn2_nm'
+            # 'conv3_nm'
+            # 'bn3_nm'
+            # 'fc'
 
-          
             # Query the neuromodulatory network:
-            
+
             for i in range(x.size(0)):
-            
-                data = x[i].view(1,3,28,28)
-                nm_data = x[i].view(1,3,28,28)
 
-                #input_mask = self.call_input_nm(data_, vars)
-                #fc_mask = self.call_fc_nm(data_, vars)
+                data = x[i].view(1, 3, 28, 28)
+                nm_data = x[i].view(1, 3, 28, 28)
 
-                w,b = vars[0], vars[1]
+                # input_mask = self.call_input_nm(data_, vars)
+                # fc_mask = self.call_fc_nm(data_, vars)
+
+                w, b = vars[0], vars[1]
                 nm_data = conv2d(nm_data, w, b)
-                w,b = vars[2], vars[3]
+                w, b = vars[2], vars[3]
                 running_mean, running_var = self.vars_bn[0], self.vars_bn[1]
                 nm_data = F.batch_norm(nm_data, running_mean, running_var, weight=w, bias=b, training=True)
 
                 nm_data = F.relu(nm_data)
                 nm_data = maxpool(nm_data, kernel_size=2, stride=2)
 
-                w,b = vars[4], vars[5]
+                w, b = vars[4], vars[5]
                 nm_data = conv2d(nm_data, w, b)
-                w,b = vars[6], vars[7]
+                w, b = vars[6], vars[7]
                 running_mean, running_var = self.vars_bn[2], self.vars_bn[3]
                 nm_data = F.batch_norm(nm_data, running_mean, running_var, weight=w, bias=b, training=True)
 
                 nm_data = F.relu(nm_data)
                 nm_data = maxpool(nm_data, kernel_size=2, stride=2)
 
-                w,b = vars[8], vars[9]
+                w, b = vars[8], vars[9]
                 nm_data = conv2d(nm_data, w, b)
-                w,b = vars[10], vars[11]
+                w, b = vars[10], vars[11]
                 running_mean, running_var = self.vars_bn[4], self.vars_bn[5]
                 nm_data = F.batch_norm(nm_data, running_mean, running_var, weight=w, bias=b, training=True)
                 nm_data = F.relu(nm_data)
-                #nm_data = maxpool(nm_data, kernel_size=2, stride=2)
-
+                # nm_data = maxpool(nm_data, kernel_size=2, stride=2)
 
                 nm_data = nm_data.view(nm_data.size(0), 1008)
 
                 # NM Output
 
-                w,b = vars[12], vars[13]
-                fc_mask = torch.sigmoid(F.linear(nm_data, w, b)).view(nm_data.size(0), 2304)
-
+                w, b = vars[12], vars[13]
+                nm_data = torch.sigmoid(F.linear(nm_data, w, b)).view(nm_data.size(0), 2304)
+                w, b = vars[14], vars[15]
+                fc_mask = torch.sigmoid(F.linear(nm_data, w, b)).view(nm_data.size(0), self.ksplit)
+                window = [task*self.ksplit % 1000, (task*self.ksplit + self.ksplit) % 1000]
+                past = torch.zeros(1, window[0]).to('cuda')
+                future = torch.zeros(1, 1000-window[1]).to('cuda')
+                fc_mask = torch.cat((past, fc_mask, future), dim=1)
 
                 # =========== PREDICTION NETWORK ===========
 
-                #'conv1'
-                #'bn1'
-                #'conv2'
-                #'bn2'
-                #'conv3'
-                #'bn3'
-                #'fc'
+                # 'conv1'
+                # 'bn1'
+                # 'conv2'
+                # 'bn2'
+                # 'conv3'
+                # 'bn3'
+                # 'fc'
 
-                w,b = vars[14], vars[15]
-            
+                w, b = vars[16], vars[17]
+
                 data = conv2d(data, w, b)
 
-                w,b = vars[16], vars[17]
+                w, b = vars[18], vars[19]
                 running_mean, running_var = self.vars_bn[6], self.vars_bn[7]
                 data = F.batch_norm(data, running_mean, running_var, weight=w, bias=b, training=True)
                 data = F.relu(data)
                 data = maxpool(data, kernel_size=2, stride=2)
 
-                w,b = vars[18], vars[19]
-            
+                w, b = vars[20], vars[21]
+
                 data = conv2d(data, w, b, stride=1)
-                w,b = vars[20], vars[21]
+                w, b = vars[22], vars[23]
                 running_mean, running_var = self.vars_bn[8], self.vars_bn[9]
                 data = F.batch_norm(data, running_mean, running_var, weight=w, bias=b, training=True)
                 data = F.relu(data)
                 data = maxpool(data, kernel_size=2, stride=2)
-                
-                w,b = vars[22], vars[23]
+
+                w, b = vars[24], vars[25]
 
                 data = conv2d(data, w, b, stride=1)
-                w,b, = vars[24], vars[25]
+                w, b = vars[26], vars[27]
                 running_mean, running_var = self.vars_bn[10], self.vars_bn[11]
                 data = F.batch_norm(data, running_mean, running_var, weight=w, bias=b, training=True)
                 data = F.relu(data)
-                #data = maxpool(data, kernel_size=2, stride=2)
+                # data = maxpool(data, kernel_size=2, stride=2)
 
-                data = data.view(data.size(0), 2304) #nothing-max-max
-                data = data*fc_mask
+                data = data.view(data.size(0), 2304)  # nothing-max-max
+                # data = data*fc_mask
+                # todo
 
-
-                w,b = vars[26], vars[27]
+                w, b = vars[28], vars[29]
                 data = F.linear(data, w, b)
+                data = data * fc_mask
 
                 try:
                     prediction = torch.cat([prediction, data], dim=0)
@@ -344,9 +352,9 @@ class Learner(nn.Module):
                     raise NotImplementedError
 
         if self.Neuromodulation:
-            return(prediction)
+            return (prediction)
         else:
-            return (x) 
+            return (x)
 
     def zero_grad(self, vars=None):
         """

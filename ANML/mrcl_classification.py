@@ -23,11 +23,9 @@ def main(args):
 
     logger = logging.getLogger('experiment')
 
-    # Using first 963 classes of the omniglot as the meta-training set
-    args.classes = list(range(963))
 
-    dataset = df.DatasetFactory.get_dataset(args.dataset, ksplit=5, background=True, train=True, all=True)
-    dataset_test = df.DatasetFactory.get_dataset(args.dataset, ksplit=5, background=True, train=False, all=True)
+    dataset = df.DatasetFactory.get_dataset(args.dataset, ksplit=args.ksplit, background=True, train=True, all=True)
+    dataset_test = df.DatasetFactory.get_dataset(args.dataset, ksplit=args.ksplit, background=True, train=False, all=True)
 
     # Iterators used for evaluation
     iterator_test = torch.utils.data.DataLoader(dataset_test, batch_size=5,
@@ -36,9 +34,12 @@ def main(args):
     iterator_train = torch.utils.data.DataLoader(dataset, batch_size=5,
                                                  shuffle=True, num_workers=1)
 
+    # Number of classes range depending on ksplit
+    args.classes = list(range(np.max(dataset.targets)))
+
     sampler = ts.SamplerFactory.get_sampler(args.dataset, args.classes, dataset, dataset_test)
 
-    config = mf.ModelFactory.get_model(args.treatment, args.dataset)
+    config = mf.ModelFactory.get_model(args.treatment, args.dataset, k_nm= args.ksplit)
 
     if torch.cuda.is_available():
         device = torch.device('cuda')
@@ -58,27 +59,27 @@ def main(args):
     utils.freeze_layers(args.rln, maml)
     
     for step in range(args.steps):
-
-        t1 = np.random.choice(args.classes, args.tasks, replace=False)
+        #t1 = np.random.choice(args.classes, args.tasks, replace=False)
+        t1 = step % (np.max(dataset.targets))
 
         d_traj_iterators = []
-        for t in t1:
-            d_traj_iterators.append(sampler.sample_task([t]))
+        #for t in t1:
+        d_traj_iterators.append(sampler.sample_task([t1]))
 
         d_rand_iterator = sampler.get_complete_iterator()
 
-        x_spt, y_spt, x_qry, y_qry = maml.sample_training_data(d_traj_iterators, d_rand_iterator, ksplit=args.ksplit,
+        x_spt, y_spt, x_qry, y_qry = maml.sample_training_data(d_traj_iterators, d_rand_iterator,
                                                                steps=args.update_step, reset=not args.no_reset)
         if torch.cuda.is_available():
             x_spt, y_spt, x_qry, y_qry = x_spt.cuda(), y_spt.cuda(), x_qry.cuda(), y_qry.cuda()
 
-        accs, loss = maml(x_spt, y_spt, x_qry, y_qry)#, args.tasks)
+        accs, loss = maml(x_spt, y_spt, x_qry, y_qry, step // args.ksplit)#, args.tasks)
 
         # Evaluation during training for sanity checks
         if step % 40 == 0:
             #writer.add_scalar('/metatrain/train/accuracy', accs, step)
             logger.info('step: %d \t training acc %s', step, str(accs))
-        if step % 100 == 0 or step == 19999:
+        if step % 100 == 0 or step == args.steps-1:
             torch.save(maml.net, args.model_name)
         if step % 2000 == 0 and step != 0:
             utils.log_accuracy(maml, my_experiment, iterator_test, device, writer, step)
@@ -95,7 +96,7 @@ if __name__ == '__main__':
     argparser.add_argument('--seed', type=int, help='Seed for random', default=10000)
     argparser.add_argument('--seeds', type=int, nargs='+', help='n way', default=[10])
     argparser.add_argument('--tasks', type=int, help='meta batch size, namely task num', default=1)
-    argparser.add_argument('--ksplit', type=int, help='number of char per alphabet', default=8)
+    argparser.add_argument('--ksplit', type=int, help='number of char per alphabet', default=7)
     argparser.add_argument('--meta_lr', type=float, help='meta-level outer learning rate', default=1e-2)
     argparser.add_argument('--update_lr', type=float, help='task-level inner update learning rate', default=0.01)
     argparser.add_argument('--update_step', type=int, help='task-level inner update steps', default=20)

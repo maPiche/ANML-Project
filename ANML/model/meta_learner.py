@@ -30,13 +30,13 @@ class MetaLearingClassification(nn.Module):
         else:
             neuromodulation = False
 
-        self.net = Learner.Learner(config, neuromodulation)
+        self.ksplit = args.ksplit
+        self.net = Learner.Learner(config, self.ksplit, neuromodulation)
         self.optimizer = optim.Adam(self.net.parameters(), lr=self.meta_lr)
         self.meta_iteration = 0
         self.inputNM = True
         self.nodeNM = False
         self.layers_to_fix = []
-        self.ksplit = args.ksplit
 
     def reset_classifer(self, class_to_reset):
         bias = self.net.parameters()[-1]
@@ -92,8 +92,8 @@ class MetaLearingClassification(nn.Module):
         class_cur = 0
         class_to_reset = 0
         for it1 in iterators:
-            for img, data, tasks in it1:
-                class_to_reset = data[0].item() + (self.ksplit * tasks[0].item())
+            for img, data, charc, task in it1:
+                class_to_reset = data[0].item()
                 if reset:
                     #next
                     # Resetting weights corresponding to classes in the inner updates; this prevents
@@ -124,7 +124,7 @@ class MetaLearingClassification(nn.Module):
 
         # Sampling the random batch of data
         counter = 0
-        for img, data in it2:
+        for img, data, charc, task  in it2:
             if counter == 1:
                 break
             x_rand.append(img)
@@ -136,7 +136,7 @@ class MetaLearingClassification(nn.Module):
         x_rand_temp = []
         y_rand_temp = []
         for it1 in iterators:
-            for img, data in it1:
+            for img, data, charc, task in it1:
                 counter += 1
                 x_rand_temp.append(img)
                 y_rand_temp.append(data)
@@ -154,9 +154,9 @@ class MetaLearingClassification(nn.Module):
 
         return x_traj, y_traj, x_rand, y_rand
 
-    def inner_update(self, x, fast_weights, y, bn_training):
+    def inner_update(self, x, fast_weights, y, bn_training, task):
 
-        logits = self.net(x, fast_weights, bn_training=bn_training)
+        logits = self.net(x, task, fast_weights, bn_training=bn_training)
         loss = F.cross_entropy(logits, y)
 
         if fast_weights is None:
@@ -172,9 +172,9 @@ class MetaLearingClassification(nn.Module):
 
         return fast_weights
 
-    def meta_loss(self, x, fast_weights, y, bn_training):
+    def meta_loss(self, x, task, fast_weights, y, bn_training):
 
-        logits = self.net(x, fast_weights, bn_training=bn_training)
+        logits = self.net(x, task, fast_weights, bn_training=bn_training)
         loss_q = F.cross_entropy(logits, y)
         return loss_q, logits
 
@@ -183,7 +183,7 @@ class MetaLearingClassification(nn.Module):
         correct = torch.eq(pred_q, y).sum().item()
         return correct
 
-    def forward(self, x_traj, y_traj, x_rand, y_rand):
+    def forward(self, x_traj, y_traj, x_rand, y_rand, task):
         """
         :param x_traj:   Input data of sampled trajectory
         :param y_traj:   Ground truth of the sampled trajectory
@@ -210,13 +210,13 @@ class MetaLearingClassification(nn.Module):
                     #plt.imshow(x_rand[0][i][0,:,:])
                     #plt.show()
 
-        fast_weights = self.inner_update(x_traj[0], None, y_traj[0], False)
+        fast_weights = self.inner_update(x_traj[0], None, y_traj[0], False, task)
         
         for k in range(1, self.update_step):
             # Doing inner updates using fast weights
-            fast_weights = self.inner_update(x_traj[k], fast_weights, y_traj[k], False)
+            fast_weights = self.inner_update(x_traj[k], fast_weights, y_traj[k], False, task)
         
-        meta_loss, logits = self.meta_loss(x_rand[0], fast_weights, y_rand[0], False)
+        meta_loss, logits = self.meta_loss(x_rand[0], task, fast_weights, y_rand[0], False)
      
         with torch.no_grad():
             pred_q = F.softmax(logits, dim=1).argmax(dim=1)

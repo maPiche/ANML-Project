@@ -3,7 +3,7 @@ class ModelFactory():
         pass
 
     @staticmethod
-    def get_model(model_type, dataset, in_channels=6, num_actions=6, width=300):
+    def get_model(model_type, dataset, in_channels=6, num_actions=6, k_nm=1, width=300):
 
         if "Sin" == dataset:
             if model_type=="old":
@@ -80,8 +80,9 @@ class ModelFactory():
                     ('bn2_nm', [nm_channels]),
                     ('conv3_nm', [nm_channels, nm_channels, 3, 3, 1, 0]),
                     ('bn3_nm', [nm_channels]),
-
                     ('nm_to_fc', [size_of_representation, size_of_interpreter]),
+                    # Mask window of size k
+                    ('linear', [k_nm, size_of_representation]),
 
                     # =============== Prediction network ===============================
 

@@ -262,7 +262,7 @@ class SampleOmni:
                                                      batch_size=1,
                                                      shuffle=True, num_workers=1)
         self.iterators[task] = train_iterator
-        print("Task %d has been added to the list" % task)
+        print("Class %d has been added to the list" % task)
         return train_iterator
 
     def get(self, tasks, train):
