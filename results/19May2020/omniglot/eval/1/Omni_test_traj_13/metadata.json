@@ -1,0 +1,46 @@
+{
+    "command_args": "python C:/Users/usele/Documents/Cours/IFT6760B/ANML-Project/ANML/evaluate_classification.py --rln 0 --model Neuromodulation_Model.net --name Omni_test_traj --runs 10",
+    "dir": "../results/",
+    "full_path": "../results/19May2020/omniglot/eval/1/Omni_test_traj",
+    "name": "omniglot/eval/1/Omni_test_traj",
+    "params": {
+        "commit": false,
+        "dataset": "omniglot",
+        "dataset_path": null,
+        "epoch": 1,
+        "iid": false,
+        "ksplit": 7,
+        "memory": 0,
+        "model": "Neuromodulation_Model.net",
+        "name": "omniglot/eval/1/Omni_test_traj",
+        "neuromodulation": false,
+        "no_freeze": false,
+        "reset": false,
+        "rln": 0,
+        "runs": 10,
+        "schedule": [
+            100,
+            200,
+            400,
+            590
+        ],
+        "scratch": false,
+        "seed": 222,
+        "test": false
+    },
+    "path": "../results/19May2020/omniglot/eval/1/Omni_test_traj_13/",
+    "results": {
+        "Temp Results": [
+            [
+                100,
+                {
+                    "0": [
+                        0.064,
+                        0.0002
+                    ]
+                }
+            ]
+        ]
+    },
+    "root_folder": "../results/19May2020"
+}

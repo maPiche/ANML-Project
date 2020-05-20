@@ -73,7 +73,7 @@ def main(args):
         if torch.cuda.is_available():
             x_spt, y_spt, x_qry, y_qry = x_spt.cuda(), y_spt.cuda(), x_qry.cuda(), y_qry.cuda()
 
-        accs, loss = maml(x_spt, y_spt, x_qry, y_qry, step // args.ksplit)#, args.tasks)
+        accs, loss = maml(x_spt, y_spt, x_qry, y_qry)#, args.tasks)
 
         # Evaluation during training for sanity checks
         if step % 40 == 0:

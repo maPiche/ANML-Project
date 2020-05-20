@@ -1,0 +1,83 @@
+experiment  : INFO     Frozen layers = 
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.3586666666666667
+experiment  : INFO     Final Max Result = 0.3586666666666667
+experiment  : INFO     Temp Results = {0: (0.3586666666666667, 0.001)}
+experiment  : INFO     BEST LR 0.001= 
+experiment  : INFO     Pre-epoch accuracy 0.007333333333333333
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.006
+experiment  : INFO     Final Max Result = 0.006
+experiment  : INFO     Final results = {0: (0.006, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.0006666666666666666
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.01
+experiment  : INFO     Final Max Result = 0.01
+experiment  : INFO     Final results = {0: (0.01, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.0013333333333333333
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0033333333333333335
+experiment  : INFO     Final Max Result = 0.0033333333333333335
+experiment  : INFO     Final results = {0: (0.0033333333333333335, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.0013333333333333333
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0033333333333333335
+experiment  : INFO     Final Max Result = 0.0033333333333333335
+experiment  : INFO     Final results = {0: (0.0033333333333333335, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.0
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0
+experiment  : INFO     Final Max Result = 0.0
+experiment  : INFO     Final results = {0: (0.0, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.002
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.014
+experiment  : INFO     Final Max Result = 0.014
+experiment  : INFO     Final results = {0: (0.014, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.0
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.006
+experiment  : INFO     Final Max Result = 0.006
+experiment  : INFO     Final results = {0: (0.006, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.005333333333333333
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.005333333333333333
+experiment  : INFO     Final Max Result = 0.005333333333333333
+experiment  : INFO     Final results = {0: (0.005333333333333333, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.016666666666666666
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0026666666666666666
+experiment  : INFO     Final Max Result = 0.0026666666666666666
+experiment  : INFO     Final results = {0: (0.0026666666666666666, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.0
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.007333333333333333
+experiment  : INFO     Final Max Result = 0.007333333333333333
+experiment  : INFO     Final results = {0: (0.007333333333333333, 0.001)}
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.237
+experiment  : INFO     Final Max Result = 0.237
+experiment  : INFO     Temp Results = {0: (0.237, 0.001)}
+experiment  : INFO     BEST LR 0.001= 
+experiment  : INFO     Pre-epoch accuracy 0.007666666666666666
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0
+experiment  : INFO     Final Max Result = 0.0
+experiment  : INFO     Final results = {0: (0.0, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.0023333333333333335
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0
+experiment  : INFO     Final Max Result = 0.0
+experiment  : INFO     Final results = {0: (0.0, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.0003333333333333333
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0
+experiment  : INFO     Final Max Result = 0.0
+experiment  : INFO     Final results = {0: (0.0, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.0
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0
+experiment  : INFO     Final Max Result = 0.0
+experiment  : INFO     Final results = {0: (0.0, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.0
+experiment  : INFO     Result after one epoch for LR = 0.001000

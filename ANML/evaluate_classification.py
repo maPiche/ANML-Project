@@ -46,9 +46,9 @@ def main(args):
     temp_result = []
     total_clases = args.schedule
     for tot_class in total_clases:
-        lr_list = [0.001, 0.0006, 0.0004, 0.00035, 0.0003, 0.00025, 0.0002, 0.00015, 0.0001, 0.00009, 0.00008, 0.00006, 0.00003, 0.00001]
+        lr_list = [0.001]#[0.001, 0.0006, 0.0004, 0.00035, 0.0003, 0.00025, 0.0002, 0.00015, 0.0001, 0.00009, 0.00008, 0.00006, 0.00003, 0.00001]
         lr_all = []
-        for lr_search in range(10):
+        for lr_search in range(1):
 
             #keep = np.random.choice(list(range(650)), tot_class, replace=False)
             keep = list(range(tot_class))
@@ -81,6 +81,7 @@ def main(args):
 
                     print(lr)
                     maml = torch.load(args.model, map_location='cpu')
+                    args.ksplit = maml.ksplit
 
                     if args.scratch:
                         config = mf.ModelFactory.get_model("OML", args.dataset)
@@ -200,18 +201,19 @@ def main(args):
 
         for aoo in range(args.runs):
 
-            keep = np.random.choice(list(range(650)), tot_class, replace=False)
-            
+            #keep = np.random.choice(list(range(650)), tot_class, replace=False)
+            keep = list(range(tot_class))
+
             if args.dataset == "omniglot":
 
                 dataset = utils.remove_classes_omni(
-                    df.DatasetFactory.get_dataset("omniglot", train=True, background=False), keep)
+                    df.DatasetFactory.get_dataset("omniglot",ksplit=args.ksplit, train=True, background=False), keep)
                 iterator_sorted = torch.utils.data.DataLoader(
                     utils.iterator_sorter_omni(dataset, False, classes=total_clases),
                     batch_size=1,
                     shuffle=args.iid, num_workers=2)
                 dataset = utils.remove_classes_omni(
-                    df.DatasetFactory.get_dataset("omniglot", train=not args.test, background=False), keep)
+                    df.DatasetFactory.get_dataset("omniglot",ksplit=args.ksplit, train=not args.test, background=False), keep)
                 iterator = torch.utils.data.DataLoader(dataset, batch_size=1,
                                                        shuffle=False, num_workers=1)
             elif args.dataset == "CIFAR100":
@@ -240,6 +242,7 @@ def main(args):
                 lr = best_lr
 
                 maml = torch.load(args.model, map_location='cpu')
+                args.ksplit = maml.ksplit
 
                 if args.scratch:
                     config = mf.ModelFactory.get_model("MRCL", args.dataset)
@@ -296,12 +299,12 @@ def main(args):
                             a.data = w
                 
                 correct = 0
-                for img, target in iterator:
+                for img, y, charc, task in iterator:
                     with torch.no_grad():
 
                         img = img.to(device)
-                        target = target.to(device)
-                        logits_q = maml(img, vars=None, bn_training=False, feature=False)
+                        target = target.long().to(device)
+                        logits_q = maml(img, task, vars=None, bn_training=False, feature=False)
                         pred_q = (logits_q).argmax(dim=1)
                         correct += torch.eq(pred_q, target).sum().item() / len(img)
 
@@ -321,15 +324,15 @@ def main(args):
                     print("Empty filter list")
                     list_of_params = maml.parameters()
                 
-                for x in list_of_names:
-                    logger.info("Unfrozen layer = %s", str(x[0]))
+                #for x in list_of_names:
+                 #   logger.info("Unfrozen layer = %s", str(x[0]))
                 opt = torch.optim.Adam(list_of_params, lr=lr)
 
                 for _ in range(0, args.epoch):
-                    for img, y in iterator_sorted:
+                    for img, y, charc, task in iterator_sorted:
                         img = img.to(device)
-                        y = y.to(device)
-                        pred = maml(img)
+                        y = y.long().to(device)
+                        pred = maml(img, task)
                         opt.zero_grad()
                         loss = F.cross_entropy(pred, y)
                         loss.backward()
@@ -338,10 +341,10 @@ def main(args):
                 logger.info("Result after one epoch for LR = %f", lr)
                 
                 correct = 0
-                for img, target in iterator:
+                for img, y, charc, task in iterator:
                     img = img.to(device)
-                    target = target.to(device)
-                    logits_q = maml(img, vars=None, bn_training=False, feature=False)
+                    target = target.long().to(device)
+                    logits_q = maml(img, task, vars=None, bn_training=False, feature=False)
 
                     pred_q = (logits_q).argmax(dim=1)
 
@@ -387,7 +390,8 @@ if __name__ == '__main__':
     argparser.add_argument("--rln", type=int, default=6)
     argparser.add_argument("--runs", type=int, default=50)
     argparser.add_argument("--neuromodulation", action="store_true")
-    argparser.add_argument('--ksplit', type=int, help='number of char per alphabet', default=5)
+    argparser.add_argument('--ksplit', type=int, help='number of char per alphabet', default=7)
+
 
     args = argparser.parse_args()
 

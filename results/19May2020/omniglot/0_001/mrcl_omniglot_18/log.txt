@@ -1,0 +1,2 @@
+experiment  : INFO     Len of complete iterator = 18112
+experiment  : INFO     step: 0 	 training acc 0.25

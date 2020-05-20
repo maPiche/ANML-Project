@@ -154,7 +154,7 @@ class Learner(nn.Module):
 
         return info
 
-    def forward(self, x, task, vars=None, bn_training=True, feature=False):
+    def forward(self, x, tasks, vars=None, bn_training=True, feature=False):
         """
         This function can be called by finetunning, however, in finetunning, we dont wish to update
         running_mean/running_var. Thought weights/bias of bn is updated, it has been separated by fast_weights.
@@ -230,7 +230,7 @@ class Learner(nn.Module):
                 nm_data = torch.sigmoid(F.linear(nm_data, w, b)).view(nm_data.size(0), 2304)
                 w, b = vars[14], vars[15]
                 fc_mask = torch.sigmoid(F.linear(nm_data, w, b)).view(nm_data.size(0), self.ksplit)
-                window = [task*self.ksplit % 1000, (task*self.ksplit + self.ksplit) % 1000]
+                window = [tasks[i]*self.ksplit % 1000, (tasks[i]*self.ksplit + self.ksplit) % 1000]
                 past = torch.zeros(1, window[0]).to('cuda')
                 future = torch.zeros(1, 1000-window[1]).to('cuda')
                 fc_mask = torch.cat((past, fc_mask, future), dim=1)

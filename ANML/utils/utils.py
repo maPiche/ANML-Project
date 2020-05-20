@@ -31,13 +31,13 @@ def freeze_layers(layers_to_freeze, maml):
 
     for name, param in maml.named_parameters():
         if name in frozen_layers:
-            logger.info("RLN layer %s", str(name))
+            #logger.info("RLN layer %s", str(name))
             param.learn = False
 
     list_of_names = list(filter(lambda x: x[1].learn, maml.named_parameters()))
 
-    for a in list_of_names:
-        logger.info("TLN layer = %s", a[0])
+    #for a in list_of_names:
+     #   logger.info("TLN layer = %s", a[0])
 
 def log_accuracy(maml, my_experiment, iterator_test, device, writer, step):
     correct = 0

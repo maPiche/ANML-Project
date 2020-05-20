@@ -1,0 +1,20 @@
+experiment  : INFO     Frozen layers = 
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.03
+experiment  : INFO     Result after one epoch for LR = 0.000600
+experiment  : INFO     0.046
+experiment  : INFO     Result after one epoch for LR = 0.000400
+experiment  : INFO     0.056666666666666664
+experiment  : INFO     Result after one epoch for LR = 0.000350
+experiment  : INFO     0.058
+experiment  : INFO     Result after one epoch for LR = 0.000300
+experiment  : INFO     0.05733333333333333
+experiment  : INFO     Result after one epoch for LR = 0.000250
+experiment  : INFO     0.05266666666666667
+experiment  : INFO     Result after one epoch for LR = 0.000200
+experiment  : INFO     0.064
+experiment  : INFO     Result after one epoch for LR = 0.000150
+experiment  : INFO     0.056666666666666664
+experiment  : INFO     Final Max Result = 0.064
+experiment  : INFO     Temp Results = {0: (0.064, 0.0002)}
+experiment  : INFO     BEST LR 0.0002= 

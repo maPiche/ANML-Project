@@ -127,6 +127,7 @@ class MetaLearingClassification(nn.Module):
         for img, data, charc, task in it2:
             if counter == 1:
                 break
+
             x_rand.append(img)
             y_rand.append(data)
             counter += 1
@@ -154,9 +155,9 @@ class MetaLearingClassification(nn.Module):
 
         return x_traj, y_traj, x_rand, y_rand
 
-    def inner_update(self, x, fast_weights, y, bn_training, task):
+    def inner_update(self, x, fast_weights, y, bn_training):
 
-        logits = self.net(x, task, fast_weights, bn_training=bn_training)
+        logits = self.net(x, y//self.ksplit, fast_weights, bn_training=bn_training)
         loss = F.cross_entropy(logits, y)
 
         if fast_weights is None:
@@ -172,9 +173,9 @@ class MetaLearingClassification(nn.Module):
 
         return fast_weights
 
-    def meta_loss(self, x, task, fast_weights, y, bn_training):
+    def meta_loss(self, x, fast_weights, y, bn_training):
 
-        logits = self.net(x, task, fast_weights, bn_training=bn_training)
+        logits = self.net(x, y//self.ksplit, fast_weights, bn_training=bn_training)
         loss_q = F.cross_entropy(logits, y)
         return loss_q, logits
 
@@ -183,7 +184,7 @@ class MetaLearingClassification(nn.Module):
         correct = torch.eq(pred_q, y).sum().item()
         return correct
 
-    def forward(self, x_traj, y_traj, x_rand, y_rand, task):
+    def forward(self, x_traj, y_traj, x_rand, y_rand):
         """
         :param x_traj:   Input data of sampled trajectory
         :param y_traj:   Ground truth of the sampled trajectory
@@ -210,13 +211,13 @@ class MetaLearingClassification(nn.Module):
                     #plt.imshow(x_rand[0][i][0,:,:])
                     #plt.show()
 
-        fast_weights = self.inner_update(x_traj[0], None, y_traj[0], False, task)
+        fast_weights = self.inner_update(x_traj[0], None, y_traj[0], False)
         
         for k in range(1, self.update_step):
             # Doing inner updates using fast weights
-            fast_weights = self.inner_update(x_traj[k], fast_weights, y_traj[k], False, task)
+            fast_weights = self.inner_update(x_traj[k], fast_weights, y_traj[k], False)
         
-        meta_loss, logits = self.meta_loss(x_rand[0], task, fast_weights, y_rand[0], False)
+        meta_loss, logits = self.meta_loss(x_rand[0], fast_weights, y_rand[0], False)
      
         with torch.no_grad():
             pred_q = F.softmax(logits, dim=1).argmax(dim=1)

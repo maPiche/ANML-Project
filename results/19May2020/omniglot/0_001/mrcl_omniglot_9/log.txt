@@ -1,0 +1,16 @@
+experiment  : INFO     Len of complete iterator = 18112
+experiment  : INFO     RLN layer net.vars.0
+experiment  : INFO     RLN layer net.vars.1
+experiment  : INFO     RLN layer net.vars.2
+experiment  : INFO     RLN layer net.vars.3
+experiment  : INFO     RLN layer net.vars.4
+experiment  : INFO     RLN layer net.vars.5
+experiment  : INFO     RLN layer net.vars.6
+experiment  : INFO     RLN layer net.vars.7
+experiment  : INFO     RLN layer net.vars.8
+experiment  : INFO     RLN layer net.vars.9
+experiment  : INFO     RLN layer net.vars.10
+experiment  : INFO     RLN layer net.vars.11
+experiment  : INFO     RLN layer net.vars.12
+experiment  : INFO     RLN layer net.vars.13
+experiment  : INFO     step: 0 	 training acc 0.09523809523809523
