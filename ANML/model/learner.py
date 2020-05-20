@@ -184,7 +184,6 @@ class Learner(nn.Module):
             # 'bn2_nm'
             # 'conv3_nm'
             # 'bn3_nm'
-            # 'fc'
 
             # Query the neuromodulatory network:
 
@@ -227,13 +226,7 @@ class Learner(nn.Module):
                 # NM Output
 
                 w, b = vars[12], vars[13]
-                nm_data = torch.sigmoid(F.linear(nm_data, w, b)).view(nm_data.size(0), 2304)
-                w, b = vars[14], vars[15]
-                fc_mask = torch.sigmoid(F.linear(nm_data, w, b)).view(nm_data.size(0), self.ksplit)
-                window = [tasks[i]*self.ksplit % 1000, (tasks[i]*self.ksplit + self.ksplit) % 1000]
-                past = torch.zeros(1, window[0]).to('cuda')
-                future = torch.zeros(1, 1000-window[1]).to('cuda')
-                fc_mask = torch.cat((past, fc_mask, future), dim=1)
+                fc_mask = torch.sigmoid(F.linear(nm_data, w, b)).view(nm_data.size(0), 2304)
 
                 # =========== PREDICTION NETWORK ===========
 
@@ -245,39 +238,44 @@ class Learner(nn.Module):
                 # 'bn3'
                 # 'fc'
 
-                w, b = vars[16], vars[17]
+                w, b = vars[14], vars[15]
 
                 data = conv2d(data, w, b)
 
-                w, b = vars[18], vars[19]
+                w, b = vars[16], vars[17]
                 running_mean, running_var = self.vars_bn[6], self.vars_bn[7]
                 data = F.batch_norm(data, running_mean, running_var, weight=w, bias=b, training=True)
                 data = F.relu(data)
                 data = maxpool(data, kernel_size=2, stride=2)
 
-                w, b = vars[20], vars[21]
+                w, b = vars[18], vars[19]
 
                 data = conv2d(data, w, b, stride=1)
-                w, b = vars[22], vars[23]
+                w, b = vars[20], vars[21]
                 running_mean, running_var = self.vars_bn[8], self.vars_bn[9]
                 data = F.batch_norm(data, running_mean, running_var, weight=w, bias=b, training=True)
                 data = F.relu(data)
                 data = maxpool(data, kernel_size=2, stride=2)
 
-                w, b = vars[24], vars[25]
+                w, b = vars[22], vars[23]
 
                 data = conv2d(data, w, b, stride=1)
-                w, b = vars[26], vars[27]
+                w, b, = vars[24], vars[25]
                 running_mean, running_var = self.vars_bn[10], self.vars_bn[11]
                 data = F.batch_norm(data, running_mean, running_var, weight=w, bias=b, training=True)
                 data = F.relu(data)
                 # data = maxpool(data, kernel_size=2, stride=2)
 
                 data = data.view(data.size(0), 2304)  # nothing-max-max
-
-                w, b = vars[28], vars[29]
-                data = F.linear(data, w, b)
                 data = data * fc_mask
+
+                w, b = vars[26], vars[27]
+                data = F.linear(data, w, b)
+
+                if self.ksplit > 1:
+                    task_mask = torch.zeros(1, 1000).to('cuda')
+                    task_mask[0][tasks[i] * self.ksplit % 1000: (tasks[i] * self.ksplit + self.ksplit) % 1000] = 1
+                    data = data * task_mask
 
                 try:
                     prediction = torch.cat([prediction, data], dim=0)

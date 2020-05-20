@@ -96,7 +96,7 @@ if __name__ == '__main__':
     argparser.add_argument('--seed', type=int, help='Seed for random', default=10000)
     argparser.add_argument('--seeds', type=int, nargs='+', help='n way', default=[10])
     argparser.add_argument('--tasks', type=int, help='meta batch size, namely task num', default=1)
-    argparser.add_argument('--ksplit', type=int, help='number of char per alphabet', default=500)
+    argparser.add_argument('--ksplit', type=int, help='number of char per alphabet', default=5)
     argparser.add_argument('--meta_lr', type=float, help='meta-level outer learning rate', default=1e-2)
     argparser.add_argument('--update_lr', type=float, help='task-level inner update learning rate', default=0.01)
     argparser.add_argument('--update_step', type=int, help='task-level inner update steps', default=20)

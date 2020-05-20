@@ -80,9 +80,8 @@ class ModelFactory():
                     ('bn2_nm', [nm_channels]),
                     ('conv3_nm', [nm_channels, nm_channels, 3, 3, 1, 0]),
                     ('bn3_nm', [nm_channels]),
+
                     ('nm_to_fc', [size_of_representation, size_of_interpreter]),
-                    # Mask window of size k
-                    ('linear', [k_nm, size_of_representation]),
 
                     # =============== Prediction network ===============================
 
