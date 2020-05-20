@@ -1,0 +1,36 @@
+experiment  : INFO     Frozen layers = 
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.288
+experiment  : INFO     Final Max Result = 0.288
+experiment  : INFO     Temp Results = {0: (0.288, 0.001)}
+experiment  : INFO     BEST LR 0.001= 
+experiment  : INFO     Pre-epoch accuracy 0.008666666666666666
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0006666666666666666
+experiment  : INFO     Final Max Result = 0.0006666666666666666
+experiment  : INFO     Final results = {0: (0.0006666666666666666, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.0006666666666666666
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0
+experiment  : INFO     Final Max Result = 0.0
+experiment  : INFO     Final results = {0: (0.0, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.02
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0006666666666666666
+experiment  : INFO     Final Max Result = 0.0006666666666666666
+experiment  : INFO     Final results = {0: (0.0006666666666666666, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.006
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0
+experiment  : INFO     Final Max Result = 0.0
+experiment  : INFO     Final results = {0: (0.0, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.0
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0
+experiment  : INFO     Final Max Result = 0.0
+experiment  : INFO     Final results = {0: (0.0, 0.001)}
+experiment  : INFO     Pre-epoch accuracy 0.027333333333333334
+experiment  : INFO     Result after one epoch for LR = 0.001000
+experiment  : INFO     0.0
+experiment  : INFO     Final Max Result = 0.0
+experiment  : INFO     Final results = {0: (0.0, 0.001)}

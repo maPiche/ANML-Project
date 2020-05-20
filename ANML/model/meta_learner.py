@@ -127,7 +127,6 @@ class MetaLearingClassification(nn.Module):
         for img, data, charc, task in it2:
             if counter == 1:
                 break
-
             x_rand.append(img)
             y_rand.append(data)
             counter += 1

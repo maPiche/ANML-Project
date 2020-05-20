@@ -46,9 +46,9 @@ def main(args):
     temp_result = []
     total_clases = args.schedule
     for tot_class in total_clases:
-        lr_list = [0.001]#[0.001, 0.0006, 0.0004, 0.00035, 0.0003, 0.00025, 0.0002, 0.00015, 0.0001, 0.00009, 0.00008, 0.00006, 0.00003, 0.00001]
+        lr_list = [0.001, 0.0006, 0.0004, 0.00035, 0.0003, 0.00025, 0.0002, 0.00015, 0.0001, 0.00009, 0.00008, 0.00006, 0.00003, 0.00001]
         lr_all = []
-        for lr_search in range(1):
+        for lr_search in range(10):
 
             #keep = np.random.choice(list(range(650)), tot_class, replace=False)
             keep = list(range(tot_class))
@@ -161,7 +161,7 @@ def main(args):
                             img = img.to(device)
                             y = y.long().to(device)
 
-                            pred = maml(img, task)
+                            pred = maml(img, y//args.ksplit)
                             opt.zero_grad()
                             loss = F.cross_entropy(pred, y)
                             loss.backward()
@@ -172,10 +172,8 @@ def main(args):
                     for img, target, charc, task in iterator:
                         img = img.to(device)
                         target = target.to(device)
-                        logits_q = maml(img, task, vars=None, bn_training=False, feature=False)
-
+                        logits_q = maml(img, target//args.ksplit, vars=None, bn_training=False, feature=False)
                         pred_q = (logits_q).argmax(dim=1)
-
                         correct += torch.eq(pred_q, target).sum().item() / len(img)
 
                     logger.info(str(correct / len(iterator)))
@@ -299,12 +297,11 @@ def main(args):
                             a.data = w
                 
                 correct = 0
-                for img, y, charc, task in iterator:
+                for img, target, charc, task in iterator:
                     with torch.no_grad():
-
                         img = img.to(device)
                         target = target.long().to(device)
-                        logits_q = maml(img, task, vars=None, bn_training=False, feature=False)
+                        logits_q = maml(img, target//args.ksplit, vars=None, bn_training=False, feature=False)
                         pred_q = (logits_q).argmax(dim=1)
                         correct += torch.eq(pred_q, target).sum().item() / len(img)
 
@@ -332,7 +329,7 @@ def main(args):
                     for img, y, charc, task in iterator_sorted:
                         img = img.to(device)
                         y = y.long().to(device)
-                        pred = maml(img, task)
+                        pred = maml(img, y//args.ksplit)
                         opt.zero_grad()
                         loss = F.cross_entropy(pred, y)
                         loss.backward()
@@ -341,10 +338,10 @@ def main(args):
                 logger.info("Result after one epoch for LR = %f", lr)
                 
                 correct = 0
-                for img, y, charc, task in iterator:
+                for img, target, charc, task in iterator:
                     img = img.to(device)
                     target = target.long().to(device)
-                    logits_q = maml(img, task, vars=None, bn_training=False, feature=False)
+                    logits_q = maml(img, target//args.ksplit, vars=None, bn_training=False, feature=False)
 
                     pred_q = (logits_q).argmax(dim=1)
 
@@ -390,7 +387,7 @@ if __name__ == '__main__':
     argparser.add_argument("--rln", type=int, default=6)
     argparser.add_argument("--runs", type=int, default=50)
     argparser.add_argument("--neuromodulation", action="store_true")
-    argparser.add_argument('--ksplit', type=int, help='number of char per alphabet', default=7)
+    argparser.add_argument('--ksplit', type=int, help='number of char per alphabet', default=5)
 
 
     args = argparser.parse_args()

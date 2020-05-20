@@ -82,8 +82,8 @@ def main(args):
         if step % 100 == 0 or step == args.steps-1:
             torch.save(maml.net, args.model_name)
         if step % 2000 == 0 and step != 0:
-            utils.log_accuracy(maml, my_experiment, iterator_test, device, writer, step)
-            utils.log_accuracy(maml, my_experiment, iterator_train, device, writer, step)
+            utils.log_accuracy(maml, my_experiment, iterator_test, device, writer, step, args.ksplit)
+            utils.log_accuracy(maml, my_experiment, iterator_train, device, writer, step, args.ksplit)
 
 #
 if __name__ == '__main__':
