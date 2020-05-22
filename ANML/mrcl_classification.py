@@ -88,7 +88,7 @@ def main(args):
 #
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
-    argparser.add_argument('--steps', type=int, help='epoch number', default=40000)
+    argparser.add_argument('--steps', type=int, help='epoch number', default=20000)
     argparser.add_argument('--model_name', help='Name of model to be saved', default='my_sweet_model.net')
     argparser.add_argument('--treatment', help='Neuromodulation or OML', default='Neuromodulation')
     argparser.add_argument('--checkpoint', help='Use a checkpoint model', action='store_true')

@@ -371,7 +371,7 @@ if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
     argparser.add_argument('--epoch', type=int, help='epoch number', default=1)
     argparser.add_argument('--seed', type=int, help='epoch number', default=222)
-    argparser.add_argument('--schedule', type=int, nargs='+', default=[100, 200, 400, 590],
+    argparser.add_argument('--schedule', type=int, nargs='+', default=[590],
                         help='Decrease learning rate at these epochs.')
     argparser.add_argument('--memory', type=int, help='epoch number', default=0)
     argparser.add_argument('--model', type=str, help='epoch number', default="none")
